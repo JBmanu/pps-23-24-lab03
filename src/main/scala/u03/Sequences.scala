@@ -17,10 +17,12 @@ object Sequences: // Essentially, generic linkedlists
 
     def map[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] = flatMap(l)(el => Cons(mapper(el), Nil()))
 
-    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = l1 match
-      case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
-      case Cons(_, t) => filter(t)(pred)
-      case Nil() => Nil()
+    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = ???
+//      l1 match
+//        case Cons(h, t) if pred(h) => Cons(h, filter(flatMap(t)(x => ))(pred))
+//        case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
+//        case Cons(_, t) => filter(t)(pred)
+//        case Nil() => Nil()
 
     // Lab 03
     def take[A](l: Sequence[A])(n: Int): Sequence[A] =
@@ -34,11 +36,9 @@ object Sequences: // Essentially, generic linkedlists
         case _ => Nil()
 
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] =
-      (l1, l2) match
-//        case (Cons(h1, t1), Cons(h2, t2)) => concat(Cons(h1, t2), Cons(h2, t2))
-        case (Cons(h1, t1), _) => Cons(h1, concat(t1, l2))
-        case (_, Cons(h2, t2)) => Cons(h2, concat(t2, Nil()))
-        case _ => Nil()
+      l1 match
+        case Cons(h1, t1) => Cons(h1, concat(t1, l2))
+        case _ => l2
 
     def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
       l match
