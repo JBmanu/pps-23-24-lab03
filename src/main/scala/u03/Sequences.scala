@@ -29,9 +29,11 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(h, t) if n > 0 => Cons(h, take(t)(n - 1))
         case _ => Nil()
 
-    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] = ???
-//      (f, s) match
-
+    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
+      (first, second) match
+        case (Cons(fh, ft), Cons(sh, st))
+          if !fh.equals(Nil) && !sh.equals(Nil) => Cons((fh, sh), zip(ft, st))
+        case _ => Nil()
 
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] = ???
 
