@@ -26,11 +26,12 @@ object Sequences: // Essentially, generic linkedlists
     // Lab 03
     def take[A](l: Sequence[A])(n: Int): Sequence[A] =
       l match
-        case Nil() => Nil()
-        case _ if n == 0 => Nil()
-        case Cons(h, t) => Cons(h, take(t)(n - 1))
+        case Cons(h, t) if n > 0 => Cons(h, take(t)(n - 1))
+        case _ => Nil()
 
     def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] = ???
+//      (f, s) match
+
 
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] = ???
 
