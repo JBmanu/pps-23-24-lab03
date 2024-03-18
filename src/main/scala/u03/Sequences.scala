@@ -1,6 +1,7 @@
 package u03
 
 import u03.Optionals.Optional
+import u03.Sequences.Sequence
 
 object Sequences: // Essentially, generic linkedlists
 
@@ -31,21 +32,20 @@ object Sequences: // Essentially, generic linkedlists
 
     def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
       (first, second) match
-        case (Cons(fh, ft), Cons(sh, st))
-          if !fh.equals(Nil) && !sh.equals(Nil) => Cons((fh, sh), zip(ft, st))
+        case (Cons(fh, ft), Cons(sh, st)) => Cons((fh, sh), zip(ft, st))
         case _ => Nil()
 
     def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] =
       (l1, l2) match
-        case (Cons(h1, t1), _) if !l1.equals(Nil) => Cons(h1, concat(t1, l2))
-        case (_, Cons(h2, t2)) if !l2.equals(Nil) => Cons(h2, concat(t2, Nil()))
+//        case (Cons(h1, t1), Cons(h2, t2)) => concat(Cons(h1, t2), Cons(h2, t2))
+        case (Cons(h1, t1), _) => Cons(h1, concat(t1, l2))
+        case (_, Cons(h2, t2)) => Cons(h2, concat(t2, Nil()))
         case _ => Nil()
 
     def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
       l match
-        case Cons(h, t) if !l.equals(Nil) => concat(mapper(h), flatMap(t)(mapper))
+        case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
         case _ => Nil()
-
 
     def min(l: Sequence[Int]): Optional[Int] = ???
 
