@@ -1,7 +1,10 @@
 package u03
 
 import u03.Optionals.Optional
-import u03.Sequences.Sequence
+import u03.Optionals.Optional.*
+
+import scala.annotation.tailrec
+
 
 object Sequences: // Essentially, generic linkedlists
 
@@ -17,12 +20,11 @@ object Sequences: // Essentially, generic linkedlists
 
     def map[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] = flatMap(l)(el => Cons(mapper(el), Nil()))
 
-    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = ???
-//      l1 match
-//        case Cons(h, t) if pred(h) => Cons(h, filter(flatMap(t)(x => ))(pred))
-//        case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
-//        case Cons(_, t) => filter(t)(pred)
-//        case Nil() => Nil()
+    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] =
+      l1 match
+        case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
+        case Cons(_, t) => filter(t)(pred)
+        case Nil() => Nil()
 
     // Lab 03
     def take[A](l: Sequence[A])(n: Int): Sequence[A] =
@@ -45,7 +47,12 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
         case _ => Nil()
 
-    def min(l: Sequence[Int]): Optional[Int] = ???
+    @tailrec
+    def min(l: Sequence[Int]): Optional[Int] =
+      l match
+        case Cons(h, Cons(h1, t)) => min(Cons(Math.min(h, h1), t))
+        case Cons(h, Nil()) => Just(h)
+        case _ => Empty()
 
 @main def trySequences =
   import Sequences.*
