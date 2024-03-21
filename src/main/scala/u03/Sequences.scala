@@ -14,45 +14,46 @@ object Sequences: // Essentially, generic linkedlists
 
   object Sequence:
 
-    def sum(l: Sequence[Int]): Int = l match
-      case Cons(h, t) => h + sum(t)
-      case _ => 0
+    extension (l: Sequence[Int])
+      def sum: Int = l match
+          case Cons(h, t) => h + t.sum
+          case _ => 0
 
-    def map[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] =
-      flatMap(l)(el => Cons(mapper(el), Nil()))
+      @tailrec
+      def min: Optional[Int] =
+        l match
+          case Cons(h, Cons(h1, t)) => Cons(Math.min(h, h1), t).min
+          case Cons(h, Nil()) => Just(h)
+          case _ => Empty()
+    extension [A](l: Sequence[A])
+      def map[B](mapper: A => B): Sequence[B] =
+        l.flatMap(el => Cons(mapper(el), Nil()))
 
-    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] =
-      flatMap(l1)(el => pred(el) match
-        case true => Cons(el, Nil())
-        case _ => Nil())
+      def filter(pred: A => Boolean): Sequence[A] =
+        l.flatMap(el => pred(el) match
+          case true => Cons(el, Nil())
+          case _ => Nil())
 
-    // Lab 03
-    def take[A](l: Sequence[A])(n: Int): Sequence[A] =
-      l match
-        case Cons(h, t) if n > 0 => Cons(h, take(t)(n - 1))
-        case _ => Nil()
+      // Lab 03
+      def take(n: Int): Sequence[A] =
+        l match
+          case Cons(h, t) if n > 0 => Cons(h, t.take(n - 1))
+          case _ => Nil()
 
-    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] =
-      (first, second) match
-        case (Cons(fh, ft), Cons(sh, st)) => Cons((fh, sh), zip(ft, st))
-        case _ => Nil()
+      def zip[B](second: Sequence[B]): Sequence[(A, B)] =
+        (l, second) match
+          case (Cons(fh, ft), Cons(sh, st)) => Cons((fh, sh), ft.zip(st))
+          case _ => Nil()
 
-    def concat[A](l1: Sequence[A], l2: Sequence[A]): Sequence[A] =
-      l1 match
-        case Cons(h1, t1) => Cons(h1, concat(t1, l2))
-        case _ => l2
+      def concat(l2: Sequence[A]): Sequence[A] =
+        l match
+          case Cons(h1, t1) => Cons(h1, t1.concat(l2))
+          case _ => l2
 
-    def flatMap[A, B](l: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] =
-      l match
-        case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
-        case _ => Nil()
-
-    @tailrec
-    def min(l: Sequence[Int]): Optional[Int] =
-      l match
-        case Cons(h, Cons(h1, t)) => min(Cons(Math.min(h, h1), t))
-        case Cons(h, Nil()) => Just(h)
-        case _ => Empty()
+      def flatMap[B](mapper: A => Sequence[B]): Sequence[B] =
+        l match
+          case Cons(h, t) => mapper(h).concat(t.flatMap(mapper))
+          case _ => Nil()
 
 @main def trySequences =
   import Sequences.*
@@ -60,5 +61,4 @@ object Sequences: // Essentially, generic linkedlists
   println(Sequence.sum(l)) // 30
 
   import Sequence.*
-
   println(sum(map(filter(l)(_ >= 20))(_ + 1))) // 21+31 = 52
