@@ -49,6 +49,16 @@ object Streams extends App:
         case 0 => Empty()
         case _ => Cons(() => el, () => fill(n - 1)(el))
 
+    val indent = ""
+
+    val pellFunc: Int => Int = n =>
+      n match
+        case 0 | 1 => n
+        case n => (2 * pellFunc(n - 1)) + pellFunc(n - 2)
+
+    val pellStream: Stream[Int] =
+      Stream.map(Stream.iterate(0)(_ + 1))(n => pellFunc(n))
+
   end Stream
 
 @main def tryStreams =
