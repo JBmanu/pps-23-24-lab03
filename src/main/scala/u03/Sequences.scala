@@ -1,5 +1,8 @@
 package u03
 
+import u02.Modules.Person
+import u02.Modules.Person.Teacher
+
 import u03.Optionals.Optional
 import u03.Optionals.Optional.*
 
@@ -13,6 +16,11 @@ object Sequences: // Essentially, generic linkedlists
     case Nil()
 
   object Sequence:
+    extension (l: Sequence[Person])
+      def courseOf: Sequence[String] =
+        flatMap(l)(el => el match
+          case Teacher(n, c) => Cons(c, Nil())
+          case _ => Nil())
 
     extension (l: Sequence[Int])
       def sum: Int = l match
@@ -54,6 +62,12 @@ object Sequences: // Essentially, generic linkedlists
         l match
           case Cons(h, t) => mapper(h).concat(t.flatMap(mapper))
           case _ => Nil()
+
+      @tailrec
+      def foldLeft[B](i: B)(acc: (B, A) => B): B =
+        l match
+          case Cons(h, t) => t.foldLeft(acc(i, h))(acc)
+          case _ => i
 
 @main def trySequences =
   import Sequences.*
