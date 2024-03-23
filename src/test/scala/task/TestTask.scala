@@ -44,7 +44,7 @@ class TestTaskPart2 {
   import task.TaskPart2.*
   import u02.Modules.Person
   import u02.Modules.Person.Teacher
-  
+
   @Test def courseOfPerson(): Unit =
     val p1 = Teacher("M", "Mat")
     val p2 = Teacher("I", "Ita")
@@ -55,14 +55,15 @@ class TestTaskPart2 {
   @Test def testFoldLeft(): Unit =
     val l = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
     val acc: (Int, Int) => Int = _ - _
-
-    assertEquals(-16, foldLeft(l)(0)(_ - _))
+    val totAcc = -16
+    val initFold = 0
+    assertEquals(totAcc, foldLeft(l)(initFold)(_ - _))
 }
 
 class TestTaskPart3 {
   import task.TaskPart3.*
   import u03.Streams.Stream.{iterate, toList, take}
-  
+
   @Test def testTakeWhile(): Unit =
     val str1 = iterate(0)(_ + 1) // {0,1,2,3,..}
     val str2 = takeWhile(str1)(_ < 5) // {0,1,2,3,4}

@@ -94,12 +94,3 @@ object TaskPart3 {
     Stream.map(Stream.iterate(0)(_ + 1))(n => pellFunc(n))
 
 }
-
-
-
-
-
-
-
-
-    
