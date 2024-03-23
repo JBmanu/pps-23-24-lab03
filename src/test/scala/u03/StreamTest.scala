@@ -1,9 +1,8 @@
 package u03
 import org.junit.*
 import org.junit.Assert.*
-
 import u03.Streams.*
-import Stream.*
+import Stream.{map, toList, pellStream}
 import u03.Sequences.*
 import Sequence.*
 

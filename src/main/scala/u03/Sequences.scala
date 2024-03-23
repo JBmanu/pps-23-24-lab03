@@ -48,16 +48,6 @@ object Sequences: // Essentially, generic linkedlists
           case Cons(h, t) if n > 0 => Cons(h, t.take(n - 1))
           case _ => Nil()
 
-      def zip[B](second: Sequence[B]): Sequence[(A, B)] =
-        (l, second) match
-          case (Cons(fh, ft), Cons(sh, st)) => Cons((fh, sh), ft.zip(st))
-          case _ => Nil()
-
-      def concat(l2: Sequence[A]): Sequence[A] =
-        l match
-          case Cons(h1, t1) => Cons(h1, t1.concat(l2))
-          case _ => l2
-
       def flatMap[B](mapper: A => Sequence[B]): Sequence[B] =
         l match
           case Cons(h, t) => mapper(h).concat(t.flatMap(mapper))
@@ -68,6 +58,17 @@ object Sequences: // Essentially, generic linkedlists
         l match
           case Cons(h, t) => t.foldLeft(acc(i, h))(acc)
           case _ => i
+        
+    extension [A](l1: Sequence[A])
+      def zip[B](l2: Sequence[B]): Sequence[(A, B)] =
+        (l1, l2) match
+          case (Cons(fh, ft), Cons(sh, st)) => Cons((fh, sh), ft.zip(st))
+          case _ => Nil()
+  
+      def concat(l2: Sequence[A]): Sequence[A] =
+        l1 match
+          case Cons(h1, t1) => Cons(h1, t1.concat(l2))
+          case _ => l2
 
 @main def trySequences =
   import Sequences.*

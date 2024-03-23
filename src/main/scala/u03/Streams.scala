@@ -5,8 +5,8 @@ object Streams extends App:
   import Sequences.*
 
   enum Stream[A]:
-    private case Empty()
-    private case Cons(head: () => A, tail: () => Stream[A])
+    case Empty()
+    case Cons(head: () => A, tail: () => Stream[A])
 
   object Stream:
 
@@ -53,9 +53,7 @@ object Streams extends App:
       n match
         case 0 | 1 => n
         case n =>
-          lazy val prev1 = pellFunc(n - 1)
-          lazy val pred2 = pellFunc(n - 2)
-          lazy val res = prev1 + prev1 + pred2
+          lazy val res = (pellFunc(n - 1) * 2) + pellFunc(n - 2)
           res
 
     val pellStream: Stream[Int] =
