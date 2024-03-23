@@ -14,7 +14,7 @@ object TaskPart1 {
     def min: Optional[Int] =
       l match
         case Cons(h, Cons(h1, t)) => Cons(Math.min(h, h1), t).min
-        case Cons(h, Nil()) => Just(h)
+        case Cons(h, _) => Just(h)
         case _ => Empty()
 
   extension [A](l: Sequence[A])
@@ -44,7 +44,7 @@ object TaskPart1 {
 
     def concat(l2: Sequence[A]): Sequence[A] =
       l1 match
-        case Cons(h1, t1) => Cons(h1, t1.concat(l2))
+        case Cons(h, t) => Cons(h, t.concat(l2))
         case _ => l2
 
 }
@@ -56,7 +56,7 @@ object TaskPart2 {
   extension (l: Sequence[Person])
     def courseOf: Sequence[String] =
       flatMap(l)(el => el match
-        case Teacher(n, c) => Cons(c, Nil())
+        case Teacher(_, c) => Cons(c, Nil())
         case _ => Nil())
 
   extension [A](l: Sequence[A])
@@ -86,7 +86,7 @@ object TaskPart3 {
   val pellFunc: Int => Int = n =>
     n match
       case 0 | 1 => n
-      case n =>
+      case _ =>
         lazy val res = (pellFunc(n - 1) * 2) + pellFunc(n - 2)
         res
 
