@@ -71,7 +71,9 @@ object TaskPart2 {
 object TaskPart3 {
   // ho tolto il private nel enum case degli stream per poter mettere tutto in un file
   import u03.Streams.Stream
-  import u03.Streams.Stream.*
+  import u03.Streams.Stream.Empty
+  import u03.Streams.Stream.Cons
+  import u03.Streams.Stream.cons
 
   def takeWhile[A](stream: Stream[A])(pred: A => Boolean): Stream[A] =
     stream match
@@ -83,14 +85,7 @@ object TaskPart3 {
       case 0 => Empty()
       case _ => Cons(() => el, () => fill(n - 1)(el))
 
-  val pellFunc: Int => Int = n =>
-    n match
-      case 0 | 1 => n
-      case _ =>
-        lazy val res = (pellFunc(n - 1) * 2) + pellFunc(n - 2)
-        res
-
-  val pellStream: Stream[Int] =
-    Stream.map(Stream.iterate(0)(_ + 1))(n => pellFunc(n))
+  val pellFun: (Int, Int) => Stream[Int] = (pred2, pred1) => cons(pred2, pellFun(pred1, (pred1 * 2) + pred2))
+  val pellStream: Stream[Int] = pellFun(0, 1)
 
 }
